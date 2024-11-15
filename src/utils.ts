@@ -1,4 +1,4 @@
-import * as html2canvas from "html2canvas";
+import html2canvas from "html2canvas"; // Changed from import * as 
 import { data } from "./data/data";
 import { saveAs as save } from "file-saver";
 
@@ -53,14 +53,19 @@ function blobToBase64(blob: Blob): Promise<string> {
 }
 
 export async function divToBase64(querySelector: string) {
-	const el: HTMLElement | null = document.querySelector(querySelector);
-	if (!el) {
-		return "";
-	}
-	const canvas = await html2canvas(el);
-	const blob = await canvasToBlob(canvas);
-	const base64 = await blobToBase64(blob);
-	return base64;
+    const el: HTMLElement | null = document.querySelector(querySelector);
+    if (!el) {
+        return "";
+    }
+    const canvas = await html2canvas(el, {
+        allowTaint: true,
+        useCORS: true,
+        logging: true,
+        scale: window.devicePixelRatio
+    });
+    const blob = await canvasToBlob(canvas);
+    const base64 = await blobToBase64(blob);
+    return base64;
 }
 
 export function saveAs(base64: string, fileName: string) {
@@ -73,15 +78,19 @@ export async function exportDiv(querySelector: string, name: string) {
 }
 
 export function saveToPatient() {
-	top.postMessage(
-		"cephalometric-save:" +
-			JSON.stringify({
-				imgSource: data.imgSource,
-				currentAnalysisName: data.currentAnalysisName,
-				pointCoordinates: data.pointCoordinates
-			}),
-		"*"
-	);
+	if (typeof window !== 'undefined' && window.top) {
+        window.top.postMessage(
+            "cephalometric-save:" +
+            JSON.stringify({
+                imgSource: data.imgSource,
+                currentAnalysisName: data.currentAnalysisName,
+                pointCoordinates: data.pointCoordinates
+            }),
+            "*"
+        );
+    } else {
+        console.warn('Unable to access top window. Message could not be sent.');
+    }
 }
 
 export function export2Base64() {

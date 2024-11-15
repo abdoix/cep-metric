@@ -1,23 +1,42 @@
 {
-	"compilerOptions": {
-		"outDir": "./dist/",
-		"sourceMap": true,
-		"noImplicitAny": true,
-		"strictNullChecks": true,
-		"module": "commonjs",
-		"target": "es6",
-		"jsx": "react",
-		"allowJs": true,
-		"experimentalDecorators": true,
-		"forceConsistentCasingInFileNames":true,
-		"newLine": "LF",
-		"noImplicitThis": true,
-		"noUnusedParameters": true,
-		"pretty": true,
-		"strictPropertyInitialization": true,
-		"strict": true
-	},
-	"include": [
-		"./src/**/*"
-	]
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "module": "esnext",           // Changed from commonjs for better tree-shaking
+        "moduleResolution": "node",   // Added for proper module resolution
+        "target": "es6",
+        "jsx": "react",
+        "allowJs": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,  // Added for MobX decorators
+        "forceConsistentCasingInFileNames": true,
+        "newLine": "LF",
+        "noImplicitThis": true,
+        "noUnusedParameters": true,
+        "pretty": true,
+        "strictPropertyInitialization": true,
+        "strict": true,
+        "esModuleInterop": true,      // Added for better import compatibility
+        "skipLibCheck": true,         // Added to skip type checking of node_modules
+        "resolveJsonModule": true,    // Added for JSON imports
+        "allowSyntheticDefaultImports": true,  // Added for cleaner imports
+        "lib": [                      // Added to specify available APIs
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "baseUrl": "src",            // Added for cleaner imports
+        "paths": {                    // Added for path aliases
+            "*": ["*"]
+        }
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [                      // Added to exclude unnecessary files
+        "node_modules",
+        "dist"
+    ]
 }
